@@ -32,8 +32,8 @@ class Digit:
 class Segment:
     def __init__(self,position):
         self.position = position
-        self.start = [0,0]
-        self.end = [0,0]
+        self.start = [0, 0]
+        self.end = [0, 0]
         self.on = False
 
     @property
@@ -41,16 +41,16 @@ class Segment:
         return self.start
     
     @a.setter
-    def a(self,new):
-        self.start = new if (isinstance(new,list) and len(new) == 2) else self.start
+    def a(self, new):
+        self.start = new if (isinstance(new, list) and len(new) == 2) else self.start
 
     @property
     def b(self):
         return self.end
 
     @b.setter
-    def b(self,new):
-        self.end = new if (isinstance(new,list) and len(new) == 2) else self.end
+    def b(self, new):
+        self.end = new if (isinstance(new, list) and len(new) == 2) else self.end
 
 def init(amount):
     global digits
@@ -79,16 +79,15 @@ def init(amount):
         digit.segments[6].a = [_boundary+(i*_width)+(i*_gap),_boundary+(2*_width)]
         digit.segments[6].b = [_boundary+((i+1)*_width)+(i*_gap),_boundary+(2*_width)]
 
-def draw(time):
-    assert isinstance(time,int), "Time must be in seconds"
+def draw(num):
     surf.fill((0,0,0))
     
-    if len(str(time)) < len(digits):
-        time = ((len(digits)-1)*"0") + str(time)
-    else:
-        time %= "9"*len(digits)
+    while len(num) > len(digits):
+        num = str(int(num) - 10**len(digits))
 
-    for displayed,digit in list(reversed(list(zip(list(map(int,str(time)[::-1])),reversed(digits))))):
+    num = ((len(digits)-len(num))*"0") + num
+
+    for displayed, digit in list(reversed(list(zip(list(map(int, str(num)[::-1])), reversed(digits))))):
         for p,s in digit.segments.items():
             if p in configs[displayed]:
                 s.on = True
@@ -97,24 +96,4 @@ def draw(time):
     
     for d in digits:
         for s in d.segments.values():
-            pygame.draw.line(surf,(255 if s.on else 69,0,0),s.a,s.b,_bar_size)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    
+            pygame.draw.line(surf, (255 if s.on else 69,0,0), s.a, s.b, _bar_size)
