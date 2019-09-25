@@ -1,5 +1,5 @@
 import engine
-import pygame
+from engine import pygame
 import time
 import sys
 
